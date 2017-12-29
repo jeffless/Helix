@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Helix.iml" filepath="$PROJECT_DIR$/Helix.iml" />
+      <module fileurl="file://C:\Users\green\Documents\GitHub\Helix\Helix.iml" filepath="C:\Users\green\Documents\GitHub\Helix\Helix.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\green\Documents\GitHub\Helix\app\app.iml" filepath="C:\Users\green\Documents\GitHub\Helix\app\app.iml" />
     </modules>
   </component>
 </project>
