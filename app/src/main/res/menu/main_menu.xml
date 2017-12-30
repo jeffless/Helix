@@ -6,4 +6,11 @@
         android:id="@+id/menu_refresh"
         android:title="Refresh"
         app:showAsAction="ifRoom"></item>
+
+    <item
+        android:id="@+id/action_broadcast"
+        android:title="@string/broadcast"
+        android:icon="@drawable/ic_broadcast"
+        app:showAsAction="always" />
+
 </menu>

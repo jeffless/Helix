@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Helix</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_send">Send</string>
+    <string name="powered_by">Powered by Helix</string>
+    <string name="placeholder">Write a message</string>
+    <string name="broadcast">Broadcast</string>
+    <string name="registration_error">A registration occurred. Make sure you\'re online the first time
+    that you install this sample app</string>
 </resources>
