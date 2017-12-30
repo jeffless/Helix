@@ -49,8 +49,18 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder> {
     private Context mContext;
     private LayoutInflater inflater;
 
+    private String title, pubDate, content;
+
     public FeedAdapter(RSSObject rssObject, Context mContext) {
         this.rssObject = rssObject;
+        this.mContext = mContext;
+        inflater = LayoutInflater.from(mContext);
+    }
+
+    public FeedAdapter(String title, String pubDate, String content, Context mContext) {
+        this.title = title;
+        this.pubDate = pubDate;
+        this.content = content;
         this.mContext = mContext;
         inflater = LayoutInflater.from(mContext);
     }
@@ -63,9 +73,19 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder> {
 
     @Override
     public void onBindViewHolder(FeedViewHolder holder, int position) {
-        holder.txtTitle.setText(rssObject.getItems().get(position).getTitle());
-        holder.txtPubDate.setText(rssObject.getItems().get(position).getPubDate());
-        holder.txtContent.setText(rssObject.getItems().get(position).getContent());
+
+        if(rssObject != null)
+        {
+            holder.txtTitle.setText(rssObject.getItems().get(position).getTitle());
+            holder.txtPubDate.setText(rssObject.getItems().get(position).getPubDate());
+            holder.txtContent.setText(rssObject.getItems().get(position).getContent());
+        }
+
+        else {
+            holder.txtTitle.setText(title);
+            holder.txtPubDate.setText(pubDate);
+            holder.txtContent.setText(content);
+        }
 
         holder.setItemClickListener(new ItemClickListener() {
             @Override
