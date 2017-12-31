@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
     RecyclerView recyclerView;
     RSSObject rssObject;
 
-    private final String RSS_Link = "http://rss.nytimes.com/services/xml/rss/nyt/Science.xml";
+    private final String RSS_Link = "http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml";
     private final String RSS_To_JSON_API = "https://api.rss2json.com/v1/api.json?rss_url=";
 
     @Override
