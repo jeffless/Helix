@@ -29,7 +29,6 @@
 
         <activity
             android:name=".MainActivityChat"
-            android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

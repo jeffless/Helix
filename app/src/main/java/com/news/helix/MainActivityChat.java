@@ -57,12 +57,12 @@ public class MainActivityChat extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_main_chat);
+        
         // Configure the Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar2);
+        toolbar.setTitle("Chat");
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
 
         RecyclerView recyclerView = findViewById(R.id.peer_list);
         recyclerView.setAdapter(peersAdapter);
@@ -100,7 +100,7 @@ public class MainActivityChat extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        getMenuInflater().inflate(R.menu.menu_chat, menu);
         return true;
     }
 

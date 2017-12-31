@@ -63,7 +63,8 @@ public class ChatActivity extends AppCompatActivity {
         conversationId   = getIntent().getStringExtra(INTENT_EXTRA_UUID);
 
         // Configure the Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar2);
+        toolbar.setTitle("Chat");
         setSupportActionBar(toolbar);
         // Enable the Up button
         ActionBar ab = getSupportActionBar();
