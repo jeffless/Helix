@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +27,6 @@ import com.bridgefy.sdk.client.Message;
 import com.bridgefy.sdk.client.MessageListener;
 import com.bridgefy.sdk.client.RegistrationListener;
 import com.bridgefy.sdk.client.StateListener;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.news.helix.adapter.FeedAdapter;
 import com.news.helix.adapter.OfflineFeedAdapter;
@@ -46,12 +46,54 @@ public class MainActivity extends AppCompatActivity
     private final String RSS_Link = "http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml";
     private final String RSS_To_JSON_API = "https://api.rss2json.com/v1/api.json?rss_url=";
 
+    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
+
+    private boolean checkAndRequestPermissions() {
+        int network = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
+        int internet = ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
+        int bluetooth = ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH);
+        int bluetoothAdmin = ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN);
+        int fineLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        int coarseLocation = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+
+
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+        if (network != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.ACCESS_NETWORK_STATE);
+        }
+        if (internet != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.INTERNET);
+        }
+        if (bluetooth != PackageManager.PERMISSION_GRANTED) {
+                    listPermissionsNeeded.add(Manifest.permission.BLUETOOTH);
+                }
+        if (bluetoothAdmin != PackageManager.PERMISSION_GRANTED) {
+                    listPermissionsNeeded.add(Manifest.permission.BLUETOOTH_ADMIN);
+                }
+        if (fineLocation != PackageManager.PERMISSION_GRANTED) {
+                    listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+                }
+        if (coarseLocation != PackageManager.PERMISSION_GRANTED) {
+                    listPermissionsNeeded.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+                }
+
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray
+                    (new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        checkAndRequestPermissions();
+        
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if (isThingsDevice(this))
@@ -187,21 +229,21 @@ public class MainActivity extends AppCompatActivity
             });
         }
 
-        @Override
-        public void onStartError(String message, int errorCode)
-        {
-            super.onStartError(message, errorCode);
-
-            switch (errorCode)
-            {
-                case (StateListener.INSUFFICIENT_PERMISSIONS):
-                    ActivityCompat.requestPermissions(MainActivity.this,
-                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
-                    break;
-                case (StateListener.LOCATION_SERVICES_DISABLED):
-                    break;
-            }
-        }
+//        @Override
+//        public void onStartError(String message, int errorCode)
+//        {
+//            super.onStartError(message, errorCode);
+//
+//            switch (errorCode)
+//            {
+//                case (StateListener.INSUFFICIENT_PERMISSIONS):
+//                    ActivityCompat.requestPermissions(MainActivity.this,
+//                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+//                    break;
+//                case (StateListener.LOCATION_SERVICES_DISABLED):
+//                    break;
+//            }
+//        }
 
         @Override
         public void onStopped()
