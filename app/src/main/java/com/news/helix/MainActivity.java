@@ -40,8 +40,7 @@ import com.news.helix.model.RSSObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
-{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar;
     RecyclerView recyclerView;
     RSSObject rssObject;
@@ -49,23 +48,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final String RSS_To_JSON_API = "https://api.rss2json.com/v1/api.json?rss_url=";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nav_bar);
 
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        if (isThingsDevice(this))
-        {
+        if (isThingsDevice(this)) {
             bluetoothAdapter.enable();
         }
 
-        Bridgefy.initialize(getApplicationContext(), "60771531-18ed-4bc8-bac1-df3908df319c", new RegistrationListener()
-        {
+        Bridgefy.initialize(getApplicationContext(), "60771531-18ed-4bc8-bac1-df3908df319c", new RegistrationListener() {
             @Override
-            public void onRegistrationSuccessful(BridgefyClient bridgefyClient)
-            {
+            public void onRegistrationSuccessful(BridgefyClient bridgefyClient) {
                 super.onRegistrationSuccessful(bridgefyClient);
 
                 Log.wtf("mai_error", "successful registration");
@@ -73,8 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             @Override
-            public void onRegistrationFailed(int errorCode, String message)
-            {
+            public void onRegistrationFailed(int errorCode, String message) {
                 super.onRegistrationFailed(errorCode, message);
 
                 Log.wtf("mai_error", "failed registration");
@@ -103,29 +97,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         super.onDestroy();
 
         Bridgefy.stop();
     }
 
-    private void loadRSS()
-    {
-        AsyncTask<String, String, String> loadRSSAsync = new AsyncTask<String, String, String>()
-        {
+    private void loadRSS() {
+        AsyncTask<String, String, String> loadRSSAsync = new AsyncTask<String, String, String>() {
             ProgressDialog mDialog = new ProgressDialog(MainActivity.this);
 
             @Override
-            protected void onPreExecute()
-            {
+            protected void onPreExecute() {
                 mDialog.setMessage("Please wait...");
                 mDialog.show();
             }
 
             @Override
-            protected String doInBackground(String... strings)
-            {
+            protected String doInBackground(String... strings) {
                 String result;
                 HTTPDataHandler http = new HTTPDataHandler();
                 result = http.GetHTTPData(strings[0]);
@@ -133,8 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             @Override
-            protected void onPostExecute(String s)
-            {
+            protected void onPostExecute(String s) {
                 mDialog.dismiss();
                 rssObject = new Gson().fromJson(s, RSSObject.class);
                 FeedAdapter adapter = new FeedAdapter(rssObject, getBaseContext());
@@ -151,17 +139,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        if (item.getItemId() == R.id.menu_refresh)
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_refresh) {
             if (isNetworkAvailable()) loadRSS();
         }
         return true;
@@ -190,31 +175,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public boolean isThingsDevice(Context context)
-    {
+    public boolean isThingsDevice(Context context) {
         final PackageManager pm = context.getPackageManager();
         return pm.hasSystemFeature("android.hardware.type.embedded");
     }
 
-    StateListener stateListener = new StateListener()
-    {
+    StateListener stateListener = new StateListener() {
         @Override
-        public void onStarted()
-        {
+        public void onStarted() {
             super.onStarted();
 
-            if (isThingsDevice(getApplicationContext()))
-            {
+            if (isThingsDevice(getApplicationContext())) {
 
             }
 
             final Handler handler = new Handler();
 
-            handler.post(new Runnable()
-            {
+            handler.post(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     if (rssObject != null) prepareMessage();
                     handler.postDelayed(this, 1000);
                 }
@@ -222,14 +201,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         @Override
-        public void onStartError(String message, int errorCode)
-        {
+        public void onStartError(String message, int errorCode) {
             super.onStartError(message, errorCode);
 
-            switch (errorCode)
-            {
+            switch (errorCode) {
                 case (StateListener.INSUFFICIENT_PERMISSIONS):
-                   ActivityCompat.requestPermissions(MainActivity.this,
+                    ActivityCompat.requestPermissions(MainActivity.this,
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
                     break;
                 case (StateListener.LOCATION_SERVICES_DISABLED):
@@ -238,32 +215,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         @Override
-        public void onStopped()
-        {
+        public void onStopped() {
             super.onStopped();
         }
     };
 
-    MessageListener messageListener = new MessageListener()
-    {
+    MessageListener messageListener = new MessageListener() {
         @Override
-        public void onBroadcastMessageReceived(Message message)
-        {
+        public void onBroadcastMessageReceived(Message message) {
             super.onBroadcastMessageReceived(message);
 
             HashMap<String, Object> messageContent = message.getContent();
-            int count = (int)messageContent.get("count");
+            int count = (int) messageContent.get("count");
 
             ArrayList<String> title = new ArrayList<>();
             ArrayList<String> date = new ArrayList<>();
             ArrayList<String> content = new ArrayList<>();
 
 
-            for(int i = 0; i < count; i++)
-            {
-                title.add((String)messageContent.get("title" + i));
-                date.add((String)messageContent.get("date" + i));
-                content.add((String)messageContent.get("content" + i));
+            for (int i = 0; i < count; i++) {
+                title.add((String) messageContent.get("title" + i));
+                date.add((String) messageContent.get("date" + i));
+                content.add((String) messageContent.get("content" + i));
             }
 
             OfflineFeedAdapter adapter = new OfflineFeedAdapter(title, date, content, count, getBaseContext());
@@ -274,23 +247,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     };
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-        {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Bridgefy.start(messageListener, stateListener);
         }
     }
 
-    void prepareMessage()
-    {
+    void prepareMessage() {
         HashMap<String, Object> data = new HashMap<>();
 
         data.put("count", rssObject.items.size());
 
-        for(int i = 0; i < rssObject.items.size(); i++)
-        {
+        for (int i = 0; i < rssObject.items.size(); i++) {
             data.put("title" + i, rssObject.getItems().get(i).getTitle());
             data.put("date" + i, rssObject.getItems().get(i).getPubDate());
             data.put("content" + i, rssObject.getItems().get(i).getContent());
@@ -299,8 +268,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Bridgefy.sendBroadcastMessage(data);
     }
 
-    private boolean isNetworkAvailable()
-    {
+    private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
