@@ -204,6 +204,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onStartError(String message, int errorCode) {
             super.onStartError(message, errorCode);
 
+            Bridgefy.start(messageListener, stateListener);
+
             switch (errorCode) {
                 case (StateListener.INSUFFICIENT_PERMISSIONS):
                     ActivityCompat.requestPermissions(MainActivity.this,
@@ -257,6 +259,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     void prepareMessage() {
         HashMap<String, Object> data = new HashMap<>();
 
+        Bridgefy.start(messageListener, stateListener);
+        
         data.put("count", rssObject.items.size());
 
         for (int i = 0; i < rssObject.items.size(); i++) {
