@@ -204,8 +204,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onStartError(String message, int errorCode) {
             super.onStartError(message, errorCode);
 
-            Bridgefy.start(messageListener, stateListener);
-
             switch (errorCode) {
                 case (StateListener.INSUFFICIENT_PERMISSIONS):
                     ActivityCompat.requestPermissions(MainActivity.this,
