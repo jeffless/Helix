@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.news) {
 
-            Intent i = new Intent(this, MainActivityChat.class);
+            Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
 
         } else if (id == R.id.chat) {

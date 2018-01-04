@@ -42,7 +42,7 @@ import java.util.List;
 
 public class MainActivityChat extends AppCompatActivity {
 
-    private String TAG = "MainActivity";
+    private String TAG = "MainActivityChat";
 
     static final String INTENT_EXTRA_NAME = "peerName";
     static final String INTENT_EXTRA_UUID = "peerUuid";
