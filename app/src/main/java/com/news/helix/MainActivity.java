@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         HashMap<String, Object> data = new HashMap<>();
 
         Bridgefy.start(messageListener, stateListener);
-        
+
         data.put("count", rssObject.items.size());
 
         for (int i = 0; i < rssObject.items.size(); i++) {
