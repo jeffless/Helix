@@ -1,9 +1,9 @@
-package com.news.helix.entities;
+package com.bridgefy.samples.chat.entities;
 
 import com.google.gson.Gson;
 
 /**
- * Created by rrithvik on 12/30/17.
+ * @author dekaru on 5/9/17.
  */
 
 public class Peer {

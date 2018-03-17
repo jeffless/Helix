@@ -1,4 +1,4 @@
-package com.news.helix;
+package com.bridgefy.samples.chat;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bridgefy.samples.chat.entities.Peer;
 import com.bridgefy.sdk.client.Bridgefy;
 import com.bridgefy.sdk.client.BridgefyClient;
 import com.bridgefy.sdk.client.Device;
@@ -30,19 +32,14 @@ import com.bridgefy.sdk.client.MessageListener;
 import com.bridgefy.sdk.client.RegistrationListener;
 import com.bridgefy.sdk.client.Session;
 import com.bridgefy.sdk.client.StateListener;
-import com.news.helix.entities.Peer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by rrithvik on 12/30/17.
- */
+public class MainActivity extends AppCompatActivity {
 
-public class MainActivityChat extends AppCompatActivity {
-
-    private String TAG = "MainActivityChat";
+    private String TAG = "MainActivity";
 
     static final String INTENT_EXTRA_NAME = "peerName";
     static final String INTENT_EXTRA_UUID = "peerUuid";
@@ -57,12 +54,12 @@ public class MainActivityChat extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_chat);
-        
+        setContentView(R.layout.activity_main);
+
         // Configure the Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar2);
-        toolbar.setTitle("Chat");
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle(getTitle());
 
         RecyclerView recyclerView = findViewById(R.id.peer_list);
         recyclerView.setAdapter(peersAdapter);
@@ -75,7 +72,7 @@ public class MainActivityChat extends AppCompatActivity {
             bluetoothAdapter.enable();
         }
 
-        Bridgefy.initialize(getApplicationContext(), new RegistrationListener() {
+        Bridgefy.initialize(getApplicationContext(), "60771531-18ed-4bc8-bac1-df3908df319c", new RegistrationListener() {
             @Override
             public void onRegistrationSuccessful(BridgefyClient bridgefyClient) {
                 // Start Bridgefy
@@ -88,6 +85,21 @@ public class MainActivityChat extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         });
+
+
+                /* New Handler to start the Menu-Activity
+         * and close this Splash-Screen after some seconds.*/
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                Intent mainIntent = new Intent(MainActivity.this, ChatActivity.class);
+                mainIntent.putExtra(INTENT_EXTRA_NAME, BROADCAST_CHAT);
+                mainIntent.putExtra(INTENT_EXTRA_UUID, BROADCAST_CHAT);
+                MainActivity.this.startActivity(mainIntent);
+                MainActivity.this.finish();
+            }
+        }, 1000);
     }
 
     @Override
@@ -100,7 +112,7 @@ public class MainActivityChat extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_chat, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -145,7 +157,7 @@ public class MainActivityChat extends AppCompatActivity {
                 peer.setDeviceType(extractType(message));
                 peersAdapter.addPeer(peer);
 
-                // any other direct message should be treated as such
+            // any other direct message should be treated as such
             } else {
                 String incomingMessage = (String) message.getContent().get("text");
                 LocalBroadcastManager.getInstance(getBaseContext()).sendBroadcast(
@@ -153,7 +165,7 @@ public class MainActivityChat extends AppCompatActivity {
                                 .putExtra(INTENT_EXTRA_MSG, incomingMessage));
             }
 
-            if (isThingsDevice(MainActivityChat.this)) {
+            if (isThingsDevice(MainActivity.this)) {
                 //if it's an Android Things device, reply automatically
                 HashMap<String, Object> content = new HashMap<>();
                 content.put("text", "Beep boop. I'm a bot.");
@@ -213,7 +225,7 @@ public class MainActivityChat extends AppCompatActivity {
             Log.e(TAG, "onStartError: " + message);
 
             if (errorCode == StateListener.INSUFFICIENT_PERMISSIONS) {
-                ActivityCompat.requestPermissions(MainActivityChat.this,
+                ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
             }
         }

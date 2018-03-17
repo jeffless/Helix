@@ -1,41 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.news.helix">
+    package="com.bridgefy.samples.chat">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
+
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <uses-library android:name="com.google.android.things" android:required="false" />
 
-        <uses-library
-            android:name="com.google.android.things"
-            android:required="false" />
 
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait">
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".MainActivityChat"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
 
             <!-- Uncomment to launch activity automatically on boot for android-things-->
             <!--<intent-filter>-->
@@ -48,11 +42,10 @@
 
         <activity
             android:name=".ChatActivity"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.news.helix.MainActivityChat" />
+                android:value="com.bridgefy.samples.chat.MainActivity" />
         </activity>
 
         <!-- Bridgefy SDK key -->
@@ -60,5 +53,4 @@
             android:name="com.bridgefy.sdk.API_KEY"
             android:value="254540ef-f130-463c-b13d-e2d2adcb8f3a" />
     </application>
-
 </manifest>

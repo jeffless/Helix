@@ -1,4 +1,4 @@
-package com.news.helix;
+package com.bridgefy.samples.chat;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,10 +18,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.bridgefy.samples.chat.entities.Message;
+import com.bridgefy.samples.chat.entities.Peer;
 import com.bridgefy.sdk.client.BFEngineProfile;
 import com.bridgefy.sdk.client.Bridgefy;
-import com.news.helix.entities.Message;
-import com.news.helix.entities.Peer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,13 +31,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.news.helix.MainActivityChat.BROADCAST_CHAT;
-import static com.news.helix.MainActivityChat.INTENT_EXTRA_NAME;
-import static com.news.helix.MainActivityChat.INTENT_EXTRA_UUID;
+import static com.bridgefy.samples.chat.MainActivity.BROADCAST_CHAT;
+import static com.bridgefy.samples.chat.MainActivity.INTENT_EXTRA_NAME;
+import static com.bridgefy.samples.chat.MainActivity.INTENT_EXTRA_UUID;
 
-/**
- * Created by rrithvik on 12/30/17.
- */
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -55,7 +52,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chat_activity);
+        setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
 
         // recover our Peer object
@@ -63,8 +60,7 @@ public class ChatActivity extends AppCompatActivity {
         conversationId   = getIntent().getStringExtra(INTENT_EXTRA_UUID);
 
         // Configure the Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar2);
-        toolbar.setTitle("Chat");
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Enable the Up button
         ActionBar ab = getSupportActionBar();
@@ -78,8 +74,8 @@ public class ChatActivity extends AppCompatActivity {
                 .registerReceiver(new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
-                        Message message = new Message(intent.getStringExtra(MainActivityChat.INTENT_EXTRA_MSG));
-                        message.setDeviceName(intent.getStringExtra(MainActivityChat.INTENT_EXTRA_NAME));
+                        Message message = new Message(intent.getStringExtra(MainActivity.INTENT_EXTRA_MSG));
+                        message.setDeviceName(intent.getStringExtra(MainActivity.INTENT_EXTRA_NAME));
                         message.setDirection(Message.INCOMING_MESSAGE);
                         messagesAdapter.addMessage(message);
                     }
@@ -99,9 +95,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({
-        R.id.btnSend
-    })
+    @OnClick({R.id.btnSend})
     public void onMessageSend(View v) {
         // get the message and push it to the views
         String messageString = txtMessage.getText().toString();
