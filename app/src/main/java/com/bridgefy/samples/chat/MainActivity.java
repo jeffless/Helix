@@ -77,6 +77,20 @@ public class MainActivity extends AppCompatActivity {
             public void onRegistrationSuccessful(BridgefyClient bridgefyClient) {
                 // Start Bridgefy
                 startBridgefy();
+
+                /* New Handler to start the Menu-Activity
+            * and close this Splash-Screen after some seconds.*/
+                new Handler().postDelayed(new Runnable(){
+                    @Override
+                    public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                        Intent mainIntent = new Intent(MainActivity.this, ChatActivity.class);
+                        mainIntent.putExtra(INTENT_EXTRA_NAME, BROADCAST_CHAT);
+                        mainIntent.putExtra(INTENT_EXTRA_UUID, BROADCAST_CHAT);
+                        MainActivity.this.startActivity(mainIntent);
+                        MainActivity.this.finish();
+                    }
+                }, 1000);
             }
 
             @Override
@@ -85,21 +99,6 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         });
-
-
-                /* New Handler to start the Menu-Activity
-         * and close this Splash-Screen after some seconds.*/
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run() {
-                /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(MainActivity.this, ChatActivity.class);
-                mainIntent.putExtra(INTENT_EXTRA_NAME, BROADCAST_CHAT);
-                mainIntent.putExtra(INTENT_EXTRA_UUID, BROADCAST_CHAT);
-                MainActivity.this.startActivity(mainIntent);
-                MainActivity.this.finish();
-            }
-        }, 1000);
     }
 
     @Override
